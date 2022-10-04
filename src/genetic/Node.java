@@ -53,4 +53,8 @@ public class Node {
 
         return false;
     }
+
+    return int getNumber(){
+        return this.number;
+    }
 }

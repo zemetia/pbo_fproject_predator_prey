@@ -35,4 +35,92 @@ public class Genome {
         this.nextNode++;
         this.nodes[this.biasNode].layer = 0;
     }
+
+    public ArrayList<EdgeGen> getGenes(){
+        return this.genes;
+    }
+    public void fullyConnect(innovationHistory) {
+        //this will be a new number if no identical genome has mutated in the same
+
+        for (var i = 0; i < this.inputs; i++) {
+            for (var j = 0; j < this.outputs; j++) {
+                EdgeGen connectionInnovationNumber = this.getInnovationNumber(
+                        innovationHistory,
+                        this.nodes[i],
+                        this.nodes[this.nodes.size() - j - 2]
+                );
+
+                this.genes.add(
+                        new EdgeGen(
+                                this.nodes[i],
+                                this.nodes[this.nodes.size() - j - 2],
+                                random(-1, 1),
+                                connectionInnovationNumber
+                        )
+                );
+            }
+        }
+
+        EdgeGen connectionInnovationNumber = this.getInnovationNumber(
+                innovationHistory,
+                this.nodes[this.biasNode],
+                this.nodes[this.nodes.size() - 2]
+        );
+        this.genes.add(
+                new EdgeGen(
+                        this.nodes[this.biasNode],
+                        this.nodes[this.nodes.size() - 2],
+                        random(-1, 1),
+                        connectionInnovationNumber
+                )
+        );
+
+        connectionInnovationNumber = this.getInnovationNumber(
+                innovationHistory,
+                this.nodes[this.biasNode],
+                this.nodes[this.nodes.size() - 3]
+        );
+        this.genes.add(
+                new EdgeGen(
+                        this.nodes[this.biasNode],
+                        this.nodes[this.nodes.size() - 3],
+                        random(-1, 1),
+                        connectionInnovationNumber
+                )
+        );
+        //add the connection with a random array
+
+
+        //changed this so if error here
+        this.connectNodes();
+    }
+
+    public int getInnovationNumber(ArrayList<EdgeGen> innovationHistory, Node from, Node to) {
+        boolean isNew = true;
+        int connectionInnovationNumber = nextConnectionNo;
+        for (EdgeHistory history: innovationHistory) {
+            if (history.matches(this, from, to)) {
+                isNew = false;
+                connectionInnovationNumber = history.getInnovationNo();
+                break;
+            }
+        }
+
+        if (isNew) {
+            ArrayList<Integer> innoNumbers = new ArrayList<Integer>();
+            for (EdgeGen edge: this.genes)
+                innoNumbers.add(edge.getInnovationNo());
+
+            innovationHistory.add(
+                    new EdgeHistory(
+                            from.getNumber(),
+                            to.getNumber(),
+                            connectionInnovationNumber,
+                            innoNumbers
+                    )
+            );
+            nextConnectionNo++;
+        }
+        return connectionInnovationNumber;
+    }
 }

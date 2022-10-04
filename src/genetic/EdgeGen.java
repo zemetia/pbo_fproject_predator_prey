@@ -14,6 +14,10 @@ public class EdgeGen {
         this.innovation = innovation;
     }
 
+    public int getInnovationNo(){
+        return this.innovation;
+    }
+
     public void mutateWeight() {
         //double rand2 = random(1);
 
