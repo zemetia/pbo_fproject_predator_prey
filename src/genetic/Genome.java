@@ -5,12 +5,13 @@ import java.util.ArrayList;
 public class Genome {
     private ArrayList<EdgeGen> genes = new ArrayList<EdgeGen>();
     private ArrayList<Node> nodes = new ArrayList<Node>();
-    private int inputs = inputs;
-    private int outputs = outputs;
+    private int inputs;
+    private int outputs;
     private int layers = 2;
     private int nextNode = 0;
     private ArrayList<Node> network = new ArrayList<Node>();
     private int biasNode;
+    private Rand rand = new Rand();
 
     public Genome(int inputs, int output, boolean crossover) {
         this.inputs = inputs;
@@ -21,70 +22,71 @@ public class Genome {
         for (int i = 0; i < this.inputs; i++) {
             this.nodes.add(new Node(i));
             this.nextNode++;
-            this.nodes[i].layer = 0;
+            this.nodes.get(i).layer = 0;
         }
 
         for (int i = 0; i < this.outputs; i++) {
             this.nodes.add(new Node(i + this.inputs));
-            this.nodes[i + this.inputs].layer = 1;
+            this.nodes.get(i + this.inputs).layer = 1;
             this.nextNode++;
         }
 
         this.nodes.add(new Node(this.nextNode)); //bias node
         this.biasNode = this.nextNode;
         this.nextNode++;
-        this.nodes[this.biasNode].layer = 0;
+        this.nodes.get(this.biasNode).layer = 0;
     }
 
     public ArrayList<EdgeGen> getGenes(){
         return this.genes;
     }
-    public void fullyConnect(innovationHistory) {
+    public void fullyConnect(ArrayList<EdgeHistory> innovationHistory) {
         //this will be a new number if no identical genome has mutated in the same
 
         for (var i = 0; i < this.inputs; i++) {
             for (var j = 0; j < this.outputs; j++) {
-                EdgeGen connectionInnovationNumber = this.getInnovationNumber(
+                int connectionInnovationNumber = this.getInnovationNumber(
                         innovationHistory,
-                        this.nodes[i],
-                        this.nodes[this.nodes.size() - j - 2]
+                        this.nodes.get(i),
+                        this.nodes.get(this.nodes.size() - j - 2)
                 );
 
                 this.genes.add(
                         new EdgeGen(
-                                this.nodes[i],
-                                this.nodes[this.nodes.size() - j - 2],
-                                random(-1, 1),
+                                this.nodes.get(i),
+                                this.nodes.get(this.nodes.size() - j - 2),
+                                rand.get(-1, 1),
                                 connectionInnovationNumber
                         )
                 );
             }
         }
 
-        EdgeGen connectionInnovationNumber = this.getInnovationNumber(
+        int connectionInnovationNumber = this.getInnovationNumber(
                 innovationHistory,
-                this.nodes[this.biasNode],
-                this.nodes[this.nodes.size() - 2]
+                this.nodes.get(this.biasNode),
+                this.nodes.get(this.nodes.size() - 2)
         );
+
         this.genes.add(
                 new EdgeGen(
-                        this.nodes[this.biasNode],
-                        this.nodes[this.nodes.size() - 2],
-                        random(-1, 1),
+                        this.nodes.get(this.biasNode),
+                        this.nodes.get(this.nodes.size() - 2),
+                        rand.get(-1, 1),
                         connectionInnovationNumber
                 )
         );
 
         connectionInnovationNumber = this.getInnovationNumber(
                 innovationHistory,
-                this.nodes[this.biasNode],
-                this.nodes[this.nodes.size() - 3]
+                this.nodes.get(this.biasNode),
+                this.nodes.get(this.nodes.size() - 3)
         );
         this.genes.add(
                 new EdgeGen(
-                        this.nodes[this.biasNode],
-                        this.nodes[this.nodes.size() - 3],
-                        random(-1, 1),
+                        this.nodes.get(this.biasNode),
+                        this.nodes.get(this.nodes.size() - 3),
+                        rand.get(-1, 1),
                         connectionInnovationNumber
                 )
         );
@@ -95,7 +97,7 @@ public class Genome {
         this.connectNodes();
     }
 
-    public int getInnovationNumber(ArrayList<EdgeGen> innovationHistory, Node from, Node to) {
+    public int getInnovationNumber(ArrayList<EdgeHistory> innovationHistory, Node from, Node to) {
         boolean isNew = true;
         int connectionInnovationNumber = nextConnectionNo;
         for (EdgeHistory history: innovationHistory) {
@@ -113,8 +115,8 @@ public class Genome {
 
             innovationHistory.add(
                     new EdgeHistory(
-                            from.getNumber(),
-                            to.getNumber(),
+                            from,
+                            to,
                             connectionInnovationNumber,
                             innoNumbers
                     )

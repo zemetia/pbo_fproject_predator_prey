@@ -6,13 +6,13 @@ public class EdgeHistory {
     private Node fromNode;
     private Node toNode;
     private int innovationNumber;
-    private ArrayList<Integer> innovationNumbers;
+    private ArrayList<Integer> innovationNumbers = new ArrayList<Integer>();
 
     public EdgeHistory(Node from, Node to, int inno, ArrayList<Integer> innovationNumers) {
         this.fromNode = from;
         this.toNode = to;
         this.innovationNumber = inno;
-        this.innovationNumbers = new ArrayList<Integer>(innovationNumbers);
+        this.innovationNumbers = (ArrayList)innovationNumbers.clone();
     }
 
     public int getInnovationNo(){
