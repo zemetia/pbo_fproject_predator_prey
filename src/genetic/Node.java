@@ -23,7 +23,7 @@ public class Node {
     //the node sends its output to the inputs of the nodes its connected to
     public void engage() {
         if(this.layer != 0)
-            this.outputValue = sigmoid(this.inputSum);
+            this.outputValue = sigmoid((double)this.inputSum);
 
         for(EdgeGen edge: this.outputEdge) {
             if(edge.enabled)
@@ -54,7 +54,7 @@ public class Node {
         return false;
     }
 
-    return int getNumber(){
+    public int getNumber(){
         return this.number;
     }
 }

@@ -20,8 +20,8 @@ public class EdgeHistory {
     }
 
     public boolean matches(Genome genome, Node from, Node to) {
-        if(genome.getGenes().size() === this.innovationNumbers.size()) {
-            if(from.getNumber() === this.fromNode && to.getNumber() === this.toNode) {
+        if(genome.getGenes().size() == this.innovationNumbers.size()) {
+            if(from.getNumber() == this.fromNode.getNumber() && to.getNumber() == this.toNode.getNumber()) {
                 for(EdgeGen edge: genome.getGenes()) {
                     if(!this.innovationNumbers.contains(edge.getInnovationNo()))
                         return false;
