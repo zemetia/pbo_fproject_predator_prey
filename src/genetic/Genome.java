@@ -402,10 +402,8 @@ public class Genome {
 
     //---------------------------------------------------------------------------------------------------------------------------------
     //called when this Genome is better that the other parent
-    public [this] crossover(Genome parent2) {
+    public Genome crossover(Genome parent2) {
         var child = new Genome(this.inputs, this.outputs, true);
-        child.genes = [];
-        child.nodes = [];
         child.layers = this.layers;
         child.nextNode = this.nextNode;
         child.biasNode = this.biasNode;
@@ -443,13 +441,13 @@ public class Genome {
         //since all excess and disjovar genes are inherrited from the more fit parent (this Genome) the childs structure is no different from this parent | with exception of dormant connections being enabled but this wont effect this.nodes
         //so all the this.nodes can be inherrited from this parent
         for (Node node: this.nodes)
-            child.nodes.add(node.clone());
+            child.nodes.add(node.cloneNode());
 
 
         //clone all the connections so that they connect the childs new this.nodes
 
         for (EdgeGen gene: childGenes) {
-            child.genes.add(gene.clone(child.getNode(gene.fromNode.getNumber()), child.getNode(gene.toNode.getNumber())));
+            child.genes.add(gene.cloneEdge(child.getNode(gene.fromNode.getNumber()), child.getNode(gene.toNode.getNumber())));
             child.genes.get(i).enabled = isEnabled.get(i);
         }
 
@@ -485,19 +483,19 @@ public class Genome {
 
     //----------------------------------------------------------------------------------------------------------------------------------------
     //returns a copy of this genome
-    public [this] clone() {
+    public Genome cloneGenome() {
 
         Genome clone = new Genome(this.inputs, this.outputs, true);
 
         for (int i = 0; i < this.nodes.size(); i++) { //copy this.nodes
-            clone.nodes.add(this.nodes.get(i).clone());
+            clone.nodes.add(this.nodes.get(i).cloneNode());
         }
 
         //copy all the connections so that they connect the clone new this.nodes
 
         for (int i = 0; i < this.genes.size(); i++) { //copy genes
             clone.genes.add(
-                this.genes.get(i).clone(
+                this.genes.get(i).cloneEdge(
                     clone.getNode(this.genes.get(i).fromNode.getNumber()),
                     clone.getNode(this.genes.get(i).toNode.getNumber()
                     )

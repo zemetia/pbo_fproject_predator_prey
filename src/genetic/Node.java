@@ -8,7 +8,7 @@ public class Node {
     private int inputSum = 0;
     private int outputValue = 0;
     protected int layer = 0;
-    ArrayList<EdgeGen> outputEdge = new ArrayList<EdgeGen>();
+    ArrayList<EdgeGen> outputEdge = new ArrayList<>();
 
     public Node(int number) {
         this.number = number;
@@ -23,7 +23,7 @@ public class Node {
     //the node sends its output to the inputs of the nodes its connected to
     public void engage() {
         if(this.layer != 0)
-            this.outputValue = sigmoid((double)this.inputSum);
+            this.outputValue = (int) sigmoid((double)this.inputSum);
 
         for(EdgeGen edge: this.outputEdge) {
             if(edge.enabled)
@@ -31,7 +31,7 @@ public class Node {
         }
     }
 
-    public Node clone() {
+    public Node cloneNode() {
         Node clone = new Node(this.number);
         clone.layer = this.layer;
         return clone;

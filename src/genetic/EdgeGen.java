@@ -31,7 +31,7 @@ public class EdgeGen {
 
     }
 
-    public EdgeGen clone(Node from, Node to) {
+    public EdgeGen cloneEdge(Node from, Node to) {
         EdgeGen clone = new EdgeGen(from, to, this.weight, this.innovation);
         clone.enabled = this.enabled;
         return clone;
