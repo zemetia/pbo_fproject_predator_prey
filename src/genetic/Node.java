@@ -8,7 +8,7 @@ public class Node {
     private int inputSum = 0;
     private int outputValue = 0;
     protected int layer = 0;
-    private ArrayList<EdgeGen> outputEdge = new ArrayList<EdgeGen>();
+    ArrayList<EdgeGen> outputEdge = new ArrayList<EdgeGen>();
 
     public Node(int number) {
         this.number = number;
