@@ -22,19 +22,19 @@ public class Genome {
         for (int i = 0; i < this.inputs; i++) {
             this.nodes.add(new Node(i));
             this.nextNode++;
-            this.nodes.get(i).layer = 0;
+            this.nodes.get(i).setLayer(0);
         }
 
         for (int i = 0; i < this.outputs; i++) {
             this.nodes.add(new Node(i + this.inputs));
-            this.nodes.get(i + this.inputs).layer = 1;
+            this.nodes.get(i + this.inputs).setLayer(1);
             this.nextNode++;
         }
 
         this.nodes.add(new Node(this.nextNode)); //bias node
         this.biasNode = this.nextNode;
         this.nextNode++;
-        this.nodes.get(this.biasNode).layer = 0;
+        this.nodes.get(this.biasNode).setLayer(0);
     }
 
     public ArrayList<EdgeGen> getGenes(){
@@ -44,8 +44,8 @@ public class Genome {
     public void fullyConnect(ArrayList<EdgeHistory> innovationHistory) {
         //this will be a new number if no identical genome has mutated in the same
 
-        for (var i = 0; i < this.inputs; i++) {
-            for (var j = 0; j < this.outputs; j++) {
+        for (int i = 0; i < this.inputs; i++) {
+            for (int j = 0; j < this.outputs; j++) {
                 int connectionInnovationNumber = this.getInnovationNumber(
                         innovationHistory,
                         this.nodes.get(i),
@@ -118,33 +118,30 @@ public class Genome {
         for (Node node: this.nodes) //clear the connections
             node.outputEdge.clear();
 
-        for (EdgeGen gene: this.genes)  //for each connectionGene
+        for (EdgeGen gene: this.genes)  //for each EdgeGen
             gene.fromNode.outputEdge.add(gene); //add it to node
 
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     //feeding in input values varo the NN and returning output array
-    public ArrayList<Integer> feedForward(inputValues) {
+    public ArrayList<Double> feedForward(ArrayList<Double> inputValues) {
         //set the outputs of the input this.nodes
-        for (var i = 0; i < this.inputs; i++) {
-            this.nodes[i].outputValue = inputValues[i];
-        }
-        this.nodes[this.biasNode].outputValue = 1; //output of bias is 1
+        for (int i = 0; i < this.inputs; i++)
+            this.nodes.get(i).setOutputValue(inputValues.get(i));
 
-        for (var i = 0; i < this.network.length; i++) { //for each node in the network engage it(see node class for what this does)
-            this.network[i].engage();
-        }
+        this.nodes.get(this.biasNode).setOutputValue(1); //output of bias is 1
+
+        for (Node net: this.network)  //for each node in the network engage it(see node class for what this does)
+            net.engage();
 
         //the outputs are this.nodes[inputs] to this.nodes [inputs+outputs-1]
-        var outs = [];
-        for (var i = 0; i < this.outputs; i++) {
-            outs[i] = this.nodes[this.inputs + i].outputValue;
-        }
+        ArrayList<Double> outs = new ArrayList<>();
+        for (int i = 0; i < this.outputs; i++)
+            outs.add(i, this.nodes.get(this.inputs + i).getOutputValue());
 
-        for (var i = 0; i < this.nodes.length; i++) { //reset all the this.nodes for the next feed forward
-            this.nodes[i].inputSum = 0;
-        }
+        for (Node node: this.nodes) //reset all the this.nodes for the next feed forward
+            node.setInputSum(0);
 
         return outs;
     }
@@ -154,14 +151,13 @@ public class Genome {
 
     public void generateNetwork() {
         this.connectNodes();
-        this.network = [];
+        this.network.clear();
         //for each layer add the node in that layer, since layers cannot connect to themselves there is no need to order the this.nodes within a layer
 
-        for (var l = 0; l < this.layers; l++) { //for each layer
-            for (var i = 0; i < this.nodes.length; i++) { //for each node
-                if (this.nodes[i].layer == l) { //if that node is in that layer
-                    this.network.push(this.nodes[i]);
-                }
+        for (int i = 0; i < this.layers; i++) { //for each layer
+            for (Node node: this.nodes) { //for each node
+                if (node.getLayer() == i)  //if that node is in that layer
+                    this.network.add(node);
             }
         }
     }
@@ -172,80 +168,47 @@ public class Genome {
     //and the other between the new node and the output of the disabled connection
     public void addNode(ArrayList<EdgeHistory> innovationHistory) {
         //pick a random connection to create a node between
-        if (this.genes.length == 0) {
+        if (this.genes.size() == 0) {
             this.addConnection(innovationHistory);
             return;
         }
-        var randomConnection = floor(random(this.genes.length));
 
-        while (this.genes[randomConnection].fromNode == this.nodes[this.biasNode] && this.genes.length != 1) { //dont disconnect bias
-            randomConnection = floor(random(this.genes.length));
+        int randomConnection = (int)Math.floor(rand.get(this.genes.size()));
+
+        while (this.genes.get(randomConnection).fromNode == this.nodes.get(this.biasNode) && this.genes.size() != 1) { //dont disconnect bias
+            randomConnection = (int)Math.floor(rand.get(this.genes.size()));
         }
 
-        this.genes[randomConnection].enabled = false; //disable it
+        this.genes.get(randomConnection).enabled = false; //disable it
 
-        var newNodeNo = this.nextNode;
-        this.nodes.push(new Node(newNodeNo));
+        int newNodeNo = this.nextNode;
+        this.nodes.add(new Node(newNodeNo));
         this.nextNode++;
         //add a new connection to the new node with a weight of 1
-        var connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.genes[randomConnection].fromNode, this.getNode(newNodeNo));
-        this.genes.push(new connectionGene(this.genes[randomConnection].fromNode, this.getNode(newNodeNo), 1, connectionInnovationNumber));
+        int connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.genes.get(randomConnection).fromNode, this.getNode(newNodeNo));
+        this.genes.add(new EdgeGen(this.genes.get(randomConnection).fromNode, this.getNode(newNodeNo), 1, connectionInnovationNumber));
 
 
-        connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.getNode(newNodeNo), this.genes[randomConnection].toNode);
+        connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.getNode(newNodeNo), this.genes.get(randomConnection).toNode);
         //add a new connection from the new node with a weight the same as the disabled connection
-        this.genes.push(new connectionGene(this.getNode(newNodeNo), this.genes[randomConnection].toNode, this.genes[randomConnection].weight, connectionInnovationNumber));
-        this.getNode(newNodeNo).layer = this.genes[randomConnection].fromNode.layer + 1;
+        this.genes.add(new EdgeGen(this.getNode(newNodeNo), this.genes.get(randomConnection).toNode, this.genes.get(randomConnection).weight, connectionInnovationNumber));
+        this.getNode(newNodeNo).setLayer(this.genes.get(randomConnection).fromNode.getLayer() + 1);
 
 
-        connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes[this.biasNode], this.getNode(newNodeNo));
+        connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes.get(this.biasNode), this.getNode(newNodeNo));
         //connect the bias to the new node with a weight of 0
-        this.genes.push(new connectionGene(this.nodes[this.biasNode], this.getNode(newNodeNo), 0, connectionInnovationNumber));
+        this.genes.add(new EdgeGen(this.nodes.get(this.biasNode), this.getNode(newNodeNo), 0, connectionInnovationNumber));
 
         //if the layer of the new node is equal to the layer of the output node of the old connection then a new layer needs to be created
         //more accurately the layer numbers of all layers equal to or greater than this new node need to be incrimented
-        if (this.getNode(newNodeNo).layer == this.genes[randomConnection].toNode.layer) {
-            for (var i = 0; i < this.nodes.length - 1; i++) { //dont include this newest node
-                if (this.nodes[i].layer >= this.getNode(newNodeNo).layer) {
-                    this.nodes[i].layer++;
+        if (this.getNode(newNodeNo).getLayer() == this.genes.get(randomConnection).toNode.getLayer()) {
+            for (int i = 0; i < this.nodes.size() - 1; i++) { //dont include this newest node
+                if (this.nodes.get(i).getLayer() >= this.getNode(newNodeNo).getLayer()) {
+                    this.nodes.get(i).setLayer(this.nodes.get(i).getLayer() + 1);
                 }
             }
             this.layers++;
         }
-        this.connectNodes();
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    //adds a connection between 2 this.nodes which aren't currently connected
-    public void addConnection(ArrayList<EdgeHistory> innovationHistory) {
-        //cannot add a connection to a fully connected network
-        if (this.fullyConnected()) {
-            console.log("connection failed");
-            return;
-        }
-
-
-        //get random this.nodes
-        var randomNode1 = floor(random(this.nodes.length));
-        var randomNode2 = floor(random(this.nodes.length));
-        while (this.randomConnectionNodesAreShit(randomNode1, randomNode2)) { //while the random this.nodes are no good
-            //get new ones
-            randomNode1 = floor(random(this.nodes.length));
-            randomNode2 = floor(random(this.nodes.length));
-        }
-        var temp;
-        if (this.nodes[randomNode1].layer > this.nodes[randomNode2].layer) { //if the first random node is after the second then switch
-            temp = randomNode2;
-            randomNode2 = randomNode1;
-            randomNode1 = temp;
-        }
-
-        //get the innovation number of the connection
-        //this will be a new number if no identical genome has mutated in the same way
-        var connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes[randomNode1], this.nodes[randomNode2]);
-        //add the connection with a random array
-
-        this.genes.push(new connectionGene(this.nodes[randomNode1], this.nodes[randomNode2], random(-1, 1), connectionInnovationNumber)); //changed this so if error here
         this.connectNodes();
     }
 
@@ -266,7 +229,7 @@ public class Genome {
             randomNode2 = (int)Math.floor(rand.get(this.nodes.size()));
         }
         int temp;
-        if (this.nodes.get(randomNode1).layer > this.nodes.get(randomNode2).layer) { //if the first random node is after the second then switch
+        if (this.nodes.get(randomNode1).getLayer() > this.nodes.get(randomNode2).getLayer()) { //if the first random node is after the second then switch
             temp = randomNode2;
             randomNode2 = randomNode1;
             randomNode1 = temp;
@@ -287,7 +250,7 @@ public class Genome {
 //            return true;
 //
 //        return false;
-        return this.nodes.get(r1).layer == this.nodes.get(r2).layer || // if the this.nodes are in the same layer
+        return this.nodes.get(r1).getLayer() == this.nodes.get(r2).getLayer() || // if the this.nodes are in the same layer
                 this.nodes.get(r1).isConnectedTo(this.nodes.get(r2)); // if the this.nodes are already connected
     }
 
@@ -330,7 +293,7 @@ public class Genome {
 
         //System.out.println("fullyconnect1");
         int maxConnections = 0;
-        ArrayList<Integer> nodesInLayers = new ArrayList<Integer>(); //array which stored the amount of this.nodes in each layer
+        ArrayList<Integer> nodesInLayers = new ArrayList<>(); //array which stored the amount of this.nodes in each layer
         for (int i = 0; i < this.layers; i++) {
             nodesInLayers.set(i, 0);
         }
@@ -341,8 +304,8 @@ public class Genome {
 
         int nodeLayer;
         for (Node node: this.nodes) {
-            nodeLayer = (int)nodesInLayers.get(node.layer);
-            nodesInLayers.set(node.layer, ++nodeLayer);
+            nodeLayer = nodesInLayers.get(node.getLayer());
+            nodesInLayers.set(node.getLayer(), ++nodeLayer);
         }
 
         //System.out.println("fullyconnect2");
@@ -350,22 +313,20 @@ public class Genome {
         //so lets add the max for each layer together and then we will get the maximum amount of connections in the network
         for (int i = 0; i < this.layers - 1; i++) {
             int nodesInFront = 0;
-            for (var j = i + 1; j < this.layers; j++) { //for each layer infront of this layer
+            for (int j = i + 1; j < this.layers; j++) { //for each layer infront of this layer
                 nodesInFront += nodesInLayers.get(j); //add up this.nodes
             }
 
             maxConnections += nodesInLayers.get(i) * nodesInFront;
         }
         //System.out.println("fullyconnect3");
-        if (maxConnections == this.genes.size()) { //if the number of connections is equal to the max number of connections possible then it is full
-            return true;
-        }
+        //if the number of connections is equal to the max number of connections possible then it is full
+        return maxConnections == this.genes.size();
 
 
         //System.out.println(this.genes.size());
         //System.out.println(maxConnections);
         //System.out.println(nodesInLayers);
-        return false;
     }
 
 
@@ -377,7 +338,7 @@ public class Genome {
         }
 
 
-        var rand1 = rand.get(1);
+        double rand1 = rand.get(1);
         if (rand1 < 0.8) { // 80% of the time mutate weights
 
             for (EdgeGen gene: this.genes) {
@@ -386,14 +347,14 @@ public class Genome {
         }
 
         //5% of the time add a new connection
-        var rand2 = rand.get(1);
+        double rand2 = rand.get(1);
         if (rand2 < 0.05) {
 
             this.addConnection(innovationHistory);
         }
 
         //1% of the time add a node
-        var rand3 = rand.get(1);
+        double rand3 = rand.get(1);
         if (rand3 < 0.01) {
 
             this.addNode(innovationHistory);
@@ -403,12 +364,12 @@ public class Genome {
     //---------------------------------------------------------------------------------------------------------------------------------
     //called when this Genome is better that the other parent
     public Genome crossover(Genome parent2) {
-        var child = new Genome(this.inputs, this.outputs, true);
+        Genome child = new Genome(this.inputs, this.outputs, true);
         child.layers = this.layers;
         child.nextNode = this.nextNode;
         child.biasNode = this.biasNode;
-        ArrayList<EdgeGen> childGenes = new ArrayList<EdgeGen>(); // new ArrayList<EdgeGen>();//list of genes to be inherrited form the parents
-        ArrayList<Boolean> isEnabled = new ArrayList<Boolean>(); // new ArrayList<Boolean>();
+        ArrayList<EdgeGen> childGenes = new ArrayList<>(); // new ArrayList<EdgeGen>();//list of genes to be inherrited form the parents
+        ArrayList<Boolean> isEnabled = new ArrayList<>(); // new ArrayList<Boolean>();
         //all inherited genes
         for (EdgeGen gene: this.genes) {
             boolean setEnabled = true; //is this node in the chlid going to be enabled
@@ -445,9 +406,13 @@ public class Genome {
 
 
         //clone all the connections so that they connect the childs new this.nodes
-
-        for (EdgeGen gene: childGenes) {
-            child.genes.add(gene.cloneEdge(child.getNode(gene.fromNode.getNumber()), child.getNode(gene.toNode.getNumber())));
+        for (int i = 0; i < childGenes.size(); i++) {
+            child.genes.add(
+                    childGenes.get(i).cloneEdge(
+                            child.getNode(childGenes.get(i).fromNode.getNumber()),
+                            child.getNode(childGenes.get(i).toNode.getNumber())
+                    )
+            );
             child.genes.get(i).enabled = isEnabled.get(i);
         }
 
@@ -475,7 +440,7 @@ public class Genome {
         System.out.println("Genes");
         for (EdgeGen gene : this.genes)  //for each EdgeGen
             System.out.println("gene " + gene.getInnovationNo() + "From node " + gene.fromNode.getNumber() + "To node " + gene.toNode.getNumber() +
-                    "is enabled " + gene.enabled + "from layer " + gene.fromNode.layer + "to layer " + gene.toNode.layer + "weight: " + gene.weight);
+                    "is enabled " + gene.enabled + "from layer " + gene.fromNode.getLayer() + "to layer " + gene.toNode.getLayer() + "weight: " + gene.weight);
 
 
         System.out.println();

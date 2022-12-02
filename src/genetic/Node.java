@@ -5,14 +5,18 @@ import java.util.ArrayList;
 //Coded by Yoel Mountanus Sitorus a.k.a Zymer
 public class Node {
     private int number;
-    private int inputSum = 0;
-    private int outputValue = 0;
-    protected int layer = 0;
+    private double inputSum = 0;
+    private double outputValue = 0;
+    private int layer = 0;
     ArrayList<EdgeGen> outputEdge = new ArrayList<>();
 
     public Node(int number) {
         this.number = number;
         //this.drawPos = createVector();
+    }
+
+    public void setOutputValue(double outputValue) {
+        this.outputValue = outputValue;
     }
 
     //sigmoid activation function
@@ -56,5 +60,17 @@ public class Node {
 
     public int getNumber(){
         return this.number;
+    }
+    public void setInputSum(double inputSum) {
+        this.inputSum = inputSum;
+    }
+    public double getOutputValue() {
+        return outputValue;
+    }
+    public void setLayer(int layer) {
+        this.layer = layer;
+    }
+    public int getLayer() {
+        return layer;
     }
 }
