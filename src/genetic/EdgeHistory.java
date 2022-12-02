@@ -6,9 +6,9 @@ public class EdgeHistory {
     private Node fromNode;
     private Node toNode;
     private int innovationNumber;
-    private ArrayList<Integer> innovationNumbers = new ArrayList<Integer>();
+    private ArrayList<Integer> innovationNumbers = new ArrayList<>();
 
-    public EdgeHistory(Node from, Node to, int inno, ArrayList<Integer> innovationNumers) {
+    public EdgeHistory(Node from, Node to, int inno, ArrayList<Integer> innovationNumbers) {
         this.fromNode = from;
         this.toNode = to;
         this.innovationNumber = inno;
