@@ -12,10 +12,12 @@ public class Genome {
     private ArrayList<Node> network = new ArrayList<>();
     private int biasNode;
     private final Rand rand = new Rand();
+    private int nextConnectionNo;
 
     public Genome(int inputs, int outputs, boolean crossover) {
         this.inputs = inputs;
         this.outputs = outputs;
+        this.nextConnectionNo = 0;
 
         if(crossover) return;
 
