@@ -41,6 +41,10 @@ public class Entities {
 
     }
 
+    public void see(){
+        //pass dulu ye oakwoawkoawk
+    }
+
     public void setColor(Color color){
         this.color = color;
     }
