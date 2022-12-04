@@ -1,6 +1,9 @@
 package entities;
 
+import genetic.Genome;
+
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Entities {
     private double energy;
@@ -14,10 +17,13 @@ public class Entities {
     private Color color = Color.LIGHT_GRAY;
 
     private int vx, vy;
+    private Genome brain = new Genome(8, 2, false);
+    private ArrayList<Double> decision = new ArrayList<>();
+    private ArrayList<Double> vision = new ArrayList<>();
 
     public Entities(){
         //init location
-        setLocation(
+        this.setLocation(
                 (int)(Math.random()*790+0),
                 (int)(Math.random()*590+0)
         );
@@ -26,6 +32,17 @@ public class Entities {
         vx = calcLoc('x');
         vy = calcLoc('y');
 
+    }
+
+    public void think(){
+        int max = 0;
+        int maxIndex = 0;
+        this.decision = this.brain.feedForward(this.vision);
+
+    }
+
+    public void see(){
+        //pass dulu ye oakwoawkoawk
     }
 
     public void setColor(Color color){

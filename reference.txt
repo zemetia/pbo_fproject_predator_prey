@@ -1,0 +1,8 @@
+https://www.youtube.com/watch?v=1YXsU3WUmnc (Genetic Algorithm Neural Network - Part 1: Java & Spring boot)
+https://www.youtube.com/watch?v=0UdlEHjm-gU (Social Distancing Simulation/Visualization in Java using AP CSA Concepts)
+https://www.youtube.com/watch?v=qwrp3lB-jkQ&t=19s (Evolving AIs - Predator vs Prey, who will win?)
+https://github.com/domingodavid/socialDistancingJava/blob/master/Social%20Distancing/src/Person.java (domingodavid - Social Distancing Simulation)
+https://www.youtube.com/watch?v=BP6xtp_9UME (Code Bullet - AI Learns to play Hill Climb Racing || Part 1 Making the Game)
+https://www.youtube.com/watch?v=FKDNdOU_wvk (Code Bullet - Making Hill Climb Racing || Part 2 || Help ME)
+https://www.youtube.com/watch?v=SO7FFteErWs&t=2s (Code Bullet - A.I. LEARNS to Play Hill Climb Racing)
+https://github.com/Code-Bullet/Hill-Climb-Racing-AI (Code-Bullet - Hill Climb Racing AI)
