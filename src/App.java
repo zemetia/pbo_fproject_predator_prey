@@ -22,7 +22,7 @@ public class App extends JPanel implements ActionListener {
 
         //init the first entities
         initPreys(10);
-        initPreds(4);
+        initPreds(1);
 
         Timer t = new Timer(16, this);
         t.restart();

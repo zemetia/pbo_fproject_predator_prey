@@ -2,6 +2,7 @@ package entities;
 
 import Collection.Coordinate;
 import genetic.Genome;
+import genetic.Rand;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -13,30 +14,33 @@ public class Entities {
     protected Coordinate<Double> position = new Coordinate<Double>(0.0,0.0);
     protected Coordinate<Double> velocity = new Coordinate<Double>(0.0,0.0);
     protected Coordinate<Integer> size = new Coordinate<Integer>(0,0);
-    private int generation;
+    private int generation = 0;
     private int children = 0;
     private int eaten = 0;
     private Color color = Color.LIGHT_GRAY;
 
-    private Genome brain = new Genome(8, 2, false);
+    protected Genome brain;
+    protected int inputAmount = 8;
     private ArrayList<Double> decision = new ArrayList<>();
-    private ArrayList<Double> vision = new ArrayList<>();
+    protected Vision vision;
+    private Rand rand = new Rand();
 
     public Entities(){
         //init location
         this.position.setAll(
-                (Math.random()*790+0),
-                (Math.random()*590+0)
+                rand.get(790),
+                rand.get(590)
         );
 
-        direction = Math.random()*359;
+        direction = rand.get(360);
+        speed = rand.get(5, 15);
         updateVelocityDirection();
     }
 
     public void think(){
         int max = 0;
         int maxIndex = 0;
-        this.decision = this.brain.feedForward(this.vision);
+        this.decision = this.brain.feedForward(this.vision.getResult());
 
     }
 
@@ -57,9 +61,7 @@ public class Entities {
         // dont know
     }
 
-    public void paint(Graphics graph) {
-        //System.out.println(this.x + " " + this.y);
-        graph.setColor(this.color);
+    public void update() {
         position.addWithCoordinate(velocity);
 
         if(position.getPosX() < 0 || position.getPosX() >= 790) {
@@ -70,6 +72,12 @@ public class Entities {
         if(position.getPosY() < 0 || position.getPosY() >= 590) {
             velocity.setPosY(velocity.getPosY() * -1);
         }
+    }
+
+    public void paint(Graphics graph) {
+        //System.out.println(this.x + " " + this.y);
+        graph.setColor(this.color);
+        update();
 
         graph.fillOval(
                 position.getPosX().intValue(),
