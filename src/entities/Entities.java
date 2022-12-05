@@ -1,5 +1,6 @@
 package entities;
 
+import Collection.Coordinate;
 import genetic.Genome;
 
 import java.awt.*;
@@ -8,30 +9,28 @@ import java.util.ArrayList;
 public class Entities {
     private double energy;
     private double speed = 10;
-    protected int x, y; // vector y location of this entity
-    protected int h, w;
-    private double direction; //360 degrees convert into a vector (x, y) with sin and cos
+    private double direction = 0; //360 degrees convert into a vector (x, y) with sin and cos
+    protected Coordinate<Double> position = new Coordinate<Double>(0.0,0.0);
+    protected Coordinate<Double> velocity = new Coordinate<Double>(0.0,0.0);
+    protected Coordinate<Integer> size = new Coordinate<Integer>(0,0);
     private int generation;
     private int children = 0;
     private int eaten = 0;
     private Color color = Color.LIGHT_GRAY;
 
-    private int vx, vy;
     private Genome brain = new Genome(8, 2, false);
     private ArrayList<Double> decision = new ArrayList<>();
     private ArrayList<Double> vision = new ArrayList<>();
 
     public Entities(){
         //init location
-        this.setLocation(
-                (int)(Math.random()*790+0),
-                (int)(Math.random()*590+0)
+        this.position.setAll(
+                (Math.random()*790+0),
+                (Math.random()*590+0)
         );
 
         direction = Math.random()*359;
-        vx = calcLoc('x');
-        vy = calcLoc('y');
-
+        updateVelocityDirection();
     }
 
     public void think(){
@@ -39,6 +38,11 @@ public class Entities {
         int maxIndex = 0;
         this.decision = this.brain.feedForward(this.vision);
 
+    }
+
+    public void updateVelocityDirection() {
+        double radian = 2 * this.direction * Math.PI; //putaran ke rad = x * 2pi
+        this.velocity.setAll(Math.cos(radian) * this.speed, Math.sin(radian) * this.speed);
     }
 
     public void see(){
@@ -56,33 +60,26 @@ public class Entities {
     public void paint(Graphics graph) {
         //System.out.println(this.x + " " + this.y);
         graph.setColor(this.color);
-        this.x += vx;
-        this.y += vy;
+        position.addWithCoordinate(velocity);
 
-        if(x < 0 || x >= 790) {
-            vx *= -1;
+        if(position.getPosX() < 0 || position.getPosX() >= 790) {
+            velocity.setPosX(velocity.getPosX() * -1);
         }
 
         //bounce off the top and bottom
-        if(y < 0 || y >= 590) {
-            vy *= -1;
+        if(position.getPosY() < 0 || position.getPosY() >= 590) {
+            velocity.setPosY(velocity.getPosY() * -1);
         }
 
-
-        graph.fillOval(this.x, this.y, this.w, this.h);
+        graph.fillOval(
+                position.getPosX().intValue(),
+                position.getPosY().intValue(),
+                size.getPosX(),
+                size.getPosY()
+        );
     }
 
-    public int calcLoc(char loc){
-        double rad = Math.toRadians(this.direction);
-        if(loc == 'x')
-            return (int)(Math.cos(rad) * this.speed);
-        else if(loc == 'y')
-            return (int)(Math.sin(rad) * this.speed);
-        return 0;
-    }
-
-    public void setLocation(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public void setLocation(double x, double y) {
+        this.position.setAll(x, y);
     }
 }

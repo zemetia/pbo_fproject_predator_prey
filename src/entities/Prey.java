@@ -5,7 +5,7 @@ import java.awt.*;
 public class Prey extends Entities{
     public Prey() {
         super();
-        this.h = this.w = 15;
+        this.size.setAll(20, 20);
         this.setColor(Color.BLUE);
     }
 
