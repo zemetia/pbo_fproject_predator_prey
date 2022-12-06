@@ -9,6 +9,11 @@ public class Coordinate<U extends Number> {
         this.posY = posY;
     }
 
+    public Coordinate(Coordinate<U> data) {
+        this.posX = data.getPosX();
+        this.posY = data.getPosY();
+    }
+
     public U getPosY() {
         return posY;
     }
@@ -20,6 +25,11 @@ public class Coordinate<U extends Number> {
     public void setAll(U posX, U posY) {
         this.posX = posX;
         this.posY = posY;
+    }
+
+    public void setByCoordinate(Coordinate<U> data) {
+        this.posX = data.getPosX();
+        this.posY = data.getPosY();
     }
 
     public void multiplyWithCoordinate(Coordinate<U> data){
@@ -43,5 +53,9 @@ public class Coordinate<U extends Number> {
 
     public void setPosY(U posY) {
         this.posY = posY;
+    }
+
+    public Coordinate<U> clone() {
+        return new Coordinate<U>(this);
     }
 }

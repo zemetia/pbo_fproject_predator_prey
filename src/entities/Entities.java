@@ -9,18 +9,17 @@ import java.util.ArrayList;
 
 public class Entities {
     private double energy;
-    private double speed = 10;
+    protected double speed;
     private double direction = 0; //360 degrees convert into a vector (x, y) with sin and cos
     protected Coordinate<Double> position = new Coordinate<Double>(0.0,0.0);
     protected Coordinate<Double> velocity = new Coordinate<Double>(0.0,0.0);
-    protected Coordinate<Integer> size = new Coordinate<Integer>(0,0);
+    protected Coordinate<Double> size = new Coordinate<Double>(0.0,0.0);
     private int generation = 0;
     private int children = 0;
     private int eaten = 0;
     private Color color = Color.LIGHT_GRAY;
 
     protected Genome brain;
-    protected int inputAmount = 8;
     private ArrayList<Double> decision = new ArrayList<>();
     protected Vision vision;
     private Rand rand = new Rand();
@@ -40,7 +39,17 @@ public class Entities {
     public void think(){
         int max = 0;
         int maxIndex = 0;
-        this.decision = this.brain.feedForward(this.vision.getResult());
+        this.decision = this.brain.feedForward(
+                this.vision.getResult(getCenterPosition(position.clone(), size.clone()), direction)
+        );
+
+    }
+
+    public void see(){
+        //pass dulu ye oakwoawkoawk
+    }
+
+    public void lahiran() {
 
     }
 
@@ -49,8 +58,10 @@ public class Entities {
         this.velocity.setAll(Math.cos(radian) * this.speed, Math.sin(radian) * this.speed);
     }
 
-    public void see(){
-        //pass dulu ye oakwoawkoawk
+    public Coordinate<Double> getCenterPosition(Coordinate<Double> newPosition, Coordinate<Double> newSize) {
+        newSize.multiply(0.5);
+        newPosition.addWithCoordinate(newSize); //coordinat ditengah lingkaran
+        return newPosition;
     }
 
     public void setColor(Color color){
@@ -64,26 +75,34 @@ public class Entities {
     public void update() {
         position.addWithCoordinate(velocity);
 
-        if(position.getPosX() < 0 || position.getPosX() >= 790) {
-            velocity.setPosX(velocity.getPosX() * -1);
-        }
-
-        //bounce off the top and bottom
-        if(position.getPosY() < 0 || position.getPosY() >= 590) {
-            velocity.setPosY(velocity.getPosY() * -1);
-        }
+        if (position.getPosX() < 0) position.setPosX( 790.0 );
+        if (position.getPosX() >= 790) position.setPosX( 0.0 );
+        if (position.getPosY() < 0) position.setPosY( 590.0 );
+        if (position.getPosY() >= 590) position.setPosY( 0.0 );
     }
 
     public void paint(Graphics graph) {
         //System.out.println(this.x + " " + this.y);
-        graph.setColor(this.color);
+
         update();
 
+        this.vision.updatePosition(
+                this.getCenterPosition(
+                        position.clone(),
+                        size.clone()
+                )
+        );
+
+        direction += rand.get(-0.05, 0.05);
+        updateVelocityDirection();
+        this.vision.drawVision(graph, direction * 2 * Math.PI);
+
+        graph.setColor(this.color);
         graph.fillOval(
                 position.getPosX().intValue(),
                 position.getPosY().intValue(),
-                size.getPosX(),
-                size.getPosY()
+                size.getPosX().intValue(),
+                size.getPosY().intValue()
         );
     }
 
