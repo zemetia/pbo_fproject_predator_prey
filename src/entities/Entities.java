@@ -49,10 +49,6 @@ public class Entities {
         //pass dulu ye oakwoawkoawk
     }
 
-    public void lahiran() {
-
-    }
-
     public void updateVelocityDirection() {
         double radian = 2 * this.direction * Math.PI; //putaran ke rad = x * 2pi
         this.velocity.setAll(Math.cos(radian) * this.speed, Math.sin(radian) * this.speed);
@@ -81,10 +77,15 @@ public class Entities {
         if (position.getPosY() >= 590) position.setPosY( 0.0 );
     }
 
+    public void childUpdate(){
+        //pass
+    }
+
     public void paint(Graphics graph) {
         //System.out.println(this.x + " " + this.y);
 
         update();
+        childUpdate();
 
         this.vision.updatePosition(
                 this.getCenterPosition(

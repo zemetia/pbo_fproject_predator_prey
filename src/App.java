@@ -46,7 +46,7 @@ public class App extends JPanel implements ActionListener {
 
     public void initPreds(int amount){
         for(int i = 0; i < amount; i++)
-            predators.add(new Predator());
+            predators.add(new Predator(predators));
     }
 
     @Override
