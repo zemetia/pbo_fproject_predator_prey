@@ -58,4 +58,19 @@ public class Coordinate<U extends Number> {
     public Coordinate<U> clone() {
         return new Coordinate<U>(this);
     }
+
+    public double determineDistance(Coordinate<U> data) {
+        Coordinate<Double> distance = new Coordinate<Double>(
+                Math.abs(this.posX.doubleValue() - data.getPosX().doubleValue()),
+                Math.abs(this.posY.doubleValue() - data.getPosY().doubleValue())
+        );
+
+        return distance.getPhytagoras();
+    }
+
+    public double getPhytagoras() {
+        return Math.sqrt(
+                (this.posX.doubleValue() * this.posX.doubleValue()) + (this.posY.doubleValue() * this.posY.doubleValue())
+        );
+    }
 }

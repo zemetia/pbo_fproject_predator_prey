@@ -35,13 +35,20 @@ public class App extends JPanel implements ActionListener {
         super.paintComponent(g);
         for(Prey prey: preys)
             prey.paint(g);
-        for(Predator pred: predators)
-            pred.paint(g);
+        for(Predator pred: predators){
+            try {
+                pred.paint(g);
+            }
+            catch(Exception e) {
+                System.out.println("Error");
+            }
+        }
+
     }
 
     public void initPreys(int amount){
         for(int i = 0; i < amount; i++)
-            preys.add(new Prey());
+            preys.add(new Prey(preys));
     }
 
     public void initPreds(int amount){

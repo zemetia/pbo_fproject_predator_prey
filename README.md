@@ -18,4 +18,20 @@ There are 3 entitities that are Predator, Prey, and Foliage
 3. Predator
    Predators have an energy that is depleted overtime, and if their energy drops to zero, they will die.
 
+Implemented OOP
+- Casting/Conversion
+- Constructor
+- Overloading
+- Overriding
+- Encapsulation
+- Inheritance
+- Polymorphism
+- ArrayList
+- Exception Handling
+- GUI
+- Generics
+- Collection
+- Input Output
+
+Not Implement: Impements and Abstract Class
 
