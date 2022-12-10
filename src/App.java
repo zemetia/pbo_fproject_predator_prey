@@ -1,3 +1,4 @@
+import entities.Entities;
 import entities.Predator;
 import entities.Prey;
 
@@ -8,8 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class App extends JPanel implements ActionListener {
-    ArrayList<Predator> predators = new ArrayList<Predator>();
-    ArrayList<Prey> preys = new ArrayList<Prey>();
+    ArrayList<Entities> population = new ArrayList<>();
 
     public static void main(String[] args){
         App sim = new App();
@@ -33,27 +33,22 @@ public class App extends JPanel implements ActionListener {
 
     public void paint(Graphics g) {
         super.paintComponent(g);
-        for(Prey prey: preys)
-            prey.paint(g);
-        for(Predator pred: predators){
-            try {
-                pred.paint(g);
-            }
-            catch(Exception e) {
-                System.out.println("Error");
-            }
+        for(Entities entity: population){
+
+                entity.paint(g);
+
         }
 
     }
 
     public void initPreys(int amount){
         for(int i = 0; i < amount; i++)
-            preys.add(new Prey(preys));
+            population.add(new Prey(population));
     }
 
     public void initPreds(int amount){
         for(int i = 0; i < amount; i++)
-            predators.add(new Predator(predators));
+            population.add(new Predator(population));
     }
 
     @Override

@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class Prey extends Entities{
     private int inputAmount = 8;
-    private ArrayList<Prey> population;
+    private ArrayList<Entities> population;
     final double radius = 20.0;
-    public Prey(ArrayList<Prey> prey) {
+    public Prey(ArrayList<Entities> prey) {
         super();
         this.population = prey;
         this.inputAmount = 8;
@@ -19,16 +19,16 @@ public class Prey extends Entities{
         this.setColor(Color.BLUE);
     }
 
-    public Prey(ArrayList<Prey> prey, Prey parent) {
-        super();
-        this.population = prey;
-        this.inputAmount = 8;
-        this.brain = parent.brain.cloneGenome();
-        this.position.setByCoordinate(parent.position);
-        this.size.setByCoordinate(parent.size);
-
-        this.vision = new Vision(10, inputAmount, 0.3);
-        this.setColor(Color.BLUE);
-    }
+//    public Prey(ArrayList<Prey> prey, Prey parent) {
+//        super();
+//        this.population = prey;
+//        this.inputAmount = 8;
+//        this.brain = parent.brain.cloneGenome();
+//        this.position.setByCoordinate(parent.position);
+//        this.size.setByCoordinate(parent.size);
+//
+//        this.vision = new Vision(10, inputAmount, 0.3);
+//        this.setColor(Color.BLUE);
+//    }
 
 }

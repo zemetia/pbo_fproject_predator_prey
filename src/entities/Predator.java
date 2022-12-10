@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class Predator extends Entities{
     private int inputAmount = 10;
-    private ArrayList<Predator> population;
+    private ArrayList<Entities> population;
     final double radius = 30.0;
-    public Predator(ArrayList<Predator> pred){
+    public Predator(ArrayList<Entities> pred){
         super();
         this.population = pred;
         this.brain = new Genome(inputAmount, 2, false);
@@ -29,12 +29,14 @@ public class Predator extends Entities{
         return child;
     }
 
-    public void eatPrey(Prey prey) {
+    public boolean eatPrey(Prey prey) {
         double distance = this.centerPosition.determineDistance(prey.centerPosition);
-        if (distance < this.radius + prey.radius) {
+        if (distance < this.radius + prey.radius - 10) {
             this.eaten++;
-            System.out.println("kemakan");
+            System.out.println("kemakan" + this.eaten);
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -42,6 +44,12 @@ public class Predator extends Entities{
         if(this.position.getPosX() >= 789){
             this.population.add(this.lahiran());
             System.out.println("Lahiran anak");
+        }
+
+        for(Entities entity: population){
+            if(entity instanceof Prey)
+                if( this.eatPrey( (Prey)entity ) )
+                    population.remove(entity);
         }
         //this.eatPrey();
 
