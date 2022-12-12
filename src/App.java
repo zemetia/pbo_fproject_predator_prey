@@ -20,9 +20,23 @@ public class App extends JPanel implements ActionListener {
         frame.setSize(800,600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        String data = (String)JOptionPane.showInputDialog(
+                frame,
+                "Banyak jumlah Predator dan Prey:\n"
+                        + " dengan format (Predator) dan (Prey)",
+                "Initial Jumlah Predator dan Preys",
+                JOptionPane.PLAIN_MESSAGE,
+                null,
+                null,
+                "1 dan 20");
+
+        String[] result = data.split(" dan ", 2);
+        int initCountPred = Integer.parseInt( result[0] );
+        int initCountPrey = Integer.parseInt( result[1] );
+
         //init the first entities
-        initPreys(20);
-        initPreds(1);
+        initPreds(initCountPred);
+        initPreys(initCountPrey);
 
         Timer t = new Timer(16, this);
         t.restart();
