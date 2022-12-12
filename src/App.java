@@ -21,7 +21,7 @@ public class App extends JPanel implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //init the first entities
-        initPreys(10);
+        initPreys(20);
         initPreds(1);
 
         Timer t = new Timer(16, this);
@@ -38,6 +38,11 @@ public class App extends JPanel implements ActionListener {
                 entity.paint(g);
 
         }
+        long predatorPopulation = population .stream() .filter((s) -> s instanceof Predator) .count();
+        long preyPopulation = population.size() - predatorPopulation;
+
+        g.drawString("Predators Population: " + predatorPopulation, 10, 10);
+        g.drawString("Preys Population: " + preyPopulation, 10, 30);
 
     }
 

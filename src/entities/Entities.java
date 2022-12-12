@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Entities {
-    private double energy;
+    protected double energy;
     protected double speed;
     private double direction = 0; //360 degrees convert into a vector (x, y) with sin and cos
     protected Coordinate<Double> position = new Coordinate<Double>(0.0,0.0);
@@ -31,7 +31,7 @@ public class Entities {
                 rand.get(790),
                 rand.get(590)
         );
-
+        energy = 0;
         direction = rand.get(360);
         speed = rand.get(5, 15);
         updateVelocityDirection();

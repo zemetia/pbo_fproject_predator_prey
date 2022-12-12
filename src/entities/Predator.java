@@ -31,8 +31,9 @@ public class Predator extends Entities{
 
     public boolean eatPrey(Prey prey) {
         double distance = this.centerPosition.determineDistance(prey.centerPosition);
-        if (distance < this.radius + prey.radius - 10) {
+        if (distance < (this.radius + prey.radius) / 2 ) {
             this.eaten++;
+            this.energy++;
             System.out.println("kemakan" + this.eaten);
             return true;
         }
@@ -41,9 +42,10 @@ public class Predator extends Entities{
 
     @Override
     public void childUpdate() {
-        if(this.position.getPosX() >= 789){
+        if(this.energy == 3){
             this.population.add(this.lahiran());
             System.out.println("Lahiran anak");
+            this.energy = 0;
         }
 
         for(Entities entity: population){

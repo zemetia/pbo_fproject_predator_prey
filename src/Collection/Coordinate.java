@@ -2,11 +2,16 @@ package Collection;
 
 public class Coordinate<U extends Number> {
     private U posX;
-    private U posY;
-
     public Coordinate(U posX, U posY) {
         this.posX = posX;
         this.posY = posY;
+    }
+
+    private U posY;
+
+    public Coordinate() {
+        this.posX = (U)(Object)0;
+        this.posY = (U)(Object)0;
     }
 
     public Coordinate(Coordinate<U> data) {
