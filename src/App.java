@@ -34,15 +34,21 @@ public class App extends JPanel implements ActionListener {
     public void paint(Graphics g) {
         super.paintComponent(g);
         for(Entities entity: population){
-
+            try {
                 entity.paint(g);
+            }
+            catch (Exception e) {
+                System.out.println(e.toString());
+            }
 
         }
+        long totalPopulation = population.size();
         long predatorPopulation = population .stream() .filter((s) -> s instanceof Predator) .count();
-        long preyPopulation = population.size() - predatorPopulation;
+        long preyPopulation = totalPopulation - predatorPopulation;
 
-        g.drawString("Predators Population: " + predatorPopulation, 10, 10);
-        g.drawString("Preys Population: " + preyPopulation, 10, 30);
+        g.drawString("All Population: " + totalPopulation, 10, 10);
+        g.drawString("Predators Population: " + predatorPopulation, 10, 30);
+        g.drawString("Preys Population: " + preyPopulation, 10, 50);
 
     }
 

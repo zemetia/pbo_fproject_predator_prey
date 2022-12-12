@@ -20,7 +20,6 @@ public class Predator extends Entities implements PredatorSetting {
         Predator child = new Predator(population);
         child.brain = this.brain.cloneGenome();
         child.position.setByCoordinate(this.position);
-        child.vision = new Vision(INPUT_MAXLENGTH, INPUT_AMOUNT, INPUT_ANGLEAREA);
         child.generation = this.generation + 1;
         this.children++;
 
@@ -29,10 +28,9 @@ public class Predator extends Entities implements PredatorSetting {
 
     public boolean eatPrey(Prey prey) {
         double distance = this.centerPosition.determineDistance(prey.centerPosition);
-        if (distance < (RADIUS + prey.radius) / 2 ) {
+        if (distance < (RADIUS + prey.RADIUS) / 2 ) {
             this.eaten++;
             this.energy++;
-            System.out.println("kemakan" + this.eaten);
             return true;
         }
         return false;
@@ -40,10 +38,16 @@ public class Predator extends Entities implements PredatorSetting {
 
     @Override
     public void childUpdate() {
-        if(this.energy == 3){
+        energy -= 0.004;
+
+        if(this.energy >= 3){
             this.population.add(this.lahiran());
-            System.out.println("Lahiran anak");
-            this.energy = 0;
+            this.energy -= 2;
+        }
+
+        if(this.energy <= 0) {
+            population.remove(this);
+            speed = 0.0;
         }
 
         for(Entities entity: population){

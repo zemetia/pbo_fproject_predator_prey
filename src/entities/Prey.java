@@ -5,30 +5,38 @@ import genetic.Genome;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Prey extends Entities{
-    private int inputAmount = 8;
+public class Prey extends Entities implements PreySetting {
     private ArrayList<Entities> population;
-    final double radius = 20.0;
+    private boolean stunt;
     public Prey(ArrayList<Entities> prey) {
         super();
         this.population = prey;
-        this.inputAmount = 8;
-        this.brain = new Genome(inputAmount, 2, false);
-        this.vision = new Vision(50, inputAmount, 0.3);
-        this.size.setAll(radius, radius);
+        this.stunt = false;
+        this.brain = new Genome(INPUT_AMOUNT, GEN_OUTPUT, false);
+        this.vision = new Vision(INPUT_MAXLENGTH, INPUT_AMOUNT, INPUT_ANGLEAREA);
+        this.size.setAll(RADIUS, RADIUS);
         this.setColor(Color.BLUE);
     }
 
-//    public Prey(ArrayList<Prey> prey, Prey parent) {
-//        super();
-//        this.population = prey;
-//        this.inputAmount = 8;
-//        this.brain = parent.brain.cloneGenome();
-//        this.position.setByCoordinate(parent.position);
-//        this.size.setByCoordinate(parent.size);
-//
-//        this.vision = new Vision(10, inputAmount, 0.3);
-//        this.setColor(Color.BLUE);
-//    }
+    public Prey lahiran() {
+        Prey child = new Prey(population);
+        child.brain = this.brain.cloneGenome();
+        child.position.setByCoordinate(this.position);
+        child.generation = this.generation + 1;
+        this.children++;
+
+        return child;
+    }
+
+    @Override
+    public void childUpdate() {
+
+        if ( energy <= 0 ) {
+            this.population.add(this.lahiran());
+            energy += 3;
+        }
+
+        energy -= 0.001 * Math.abs(speed);
+    }
 
 }

@@ -31,7 +31,7 @@ public class Entities {
                 rand.get(790),
                 rand.get(590)
         );
-        energy = 0;
+        energy = 1.2;
         direction = rand.get(360);
         speed = rand.get(5, 15);
         updateVelocityDirection();
