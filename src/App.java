@@ -1,3 +1,4 @@
+import entities.Entities;
 import entities.Predator;
 import entities.Prey;
 
@@ -8,8 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class App extends JPanel implements ActionListener {
-    ArrayList<Predator> predators = new ArrayList<Predator>();
-    ArrayList<Prey> preys = new ArrayList<Prey>();
+    ArrayList<Entities> population = new ArrayList<>();
 
     public static void main(String[] args){
         App sim = new App();
@@ -21,8 +21,8 @@ public class App extends JPanel implements ActionListener {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //init the first entities
-        initPreys(10);
-        initPreds(4);
+        initPreys(20);
+        initPreds(1);
 
         Timer t = new Timer(16, this);
         t.restart();
@@ -33,20 +33,33 @@ public class App extends JPanel implements ActionListener {
 
     public void paint(Graphics g) {
         super.paintComponent(g);
-        for(Prey prey: preys)
-            prey.paint(g);
-        for(Predator pred: predators)
-            pred.paint(g);
+        for(Entities entity: population){
+            try {
+                entity.paint(g);
+            }
+            catch (Exception e) {
+                System.out.println(e.toString());
+            }
+
+        }
+        long totalPopulation = population.size();
+        long predatorPopulation = population .stream() .filter((s) -> s instanceof Predator) .count();
+        long preyPopulation = totalPopulation - predatorPopulation;
+
+        g.drawString("All Population: " + totalPopulation, 10, 10);
+        g.drawString("Predators Population: " + predatorPopulation, 10, 30);
+        g.drawString("Preys Population: " + preyPopulation, 10, 50);
+
     }
 
     public void initPreys(int amount){
         for(int i = 0; i < amount; i++)
-            preys.add(new Prey());
+            population.add(new Prey(population));
     }
 
     public void initPreds(int amount){
         for(int i = 0; i < amount; i++)
-            predators.add(new Predator());
+            population.add(new Predator(population));
     }
 
     @Override
