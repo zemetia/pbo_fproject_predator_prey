@@ -5,16 +5,14 @@ import genetic.Genome;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Predator extends Entities{
-    private int inputAmount = 10;
+public class Predator extends Entities implements PredatorSetting {
     private ArrayList<Entities> population;
-    final double radius = 30.0;
-    public Predator(ArrayList<Entities> pred){
+    public Predator(ArrayList<Entities> pop){
         super();
-        this.population = pred;
-        this.brain = new Genome(inputAmount, 2, false);
-        this.vision = new Vision(80, inputAmount, 0.3);
-        this.size.setAll(radius, radius);
+        this.population = pop;
+        this.brain = new Genome(INPUT_AMOUNT, GEN_OUTPUT, false);
+        this.vision = new Vision(INPUT_MAXLENGTH, INPUT_AMOUNT, INPUT_ANGLEAREA);
+        this.size.setAll(RADIUS, RADIUS);
         this.setColor(Color.RED);
     }
 
@@ -22,7 +20,7 @@ public class Predator extends Entities{
         Predator child = new Predator(population);
         child.brain = this.brain.cloneGenome();
         child.position.setByCoordinate(this.position);
-        child.vision = new Vision(80, this.inputAmount, 0.3);
+        child.vision = new Vision(INPUT_MAXLENGTH, INPUT_AMOUNT, INPUT_ANGLEAREA);
         child.generation = this.generation + 1;
         this.children++;
 
@@ -31,7 +29,7 @@ public class Predator extends Entities{
 
     public boolean eatPrey(Prey prey) {
         double distance = this.centerPosition.determineDistance(prey.centerPosition);
-        if (distance < (this.radius + prey.radius) / 2 ) {
+        if (distance < (RADIUS + prey.radius) / 2 ) {
             this.eaten++;
             this.energy++;
             System.out.println("kemakan" + this.eaten);
