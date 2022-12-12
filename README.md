@@ -32,6 +32,7 @@ Implemented OOP
 - Generics
 - Collection
 - Input Output
+- Implements
 
-Not Implement: Impements and Abstract Class
+Not Implement: Abstract Class
 
