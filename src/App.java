@@ -1,6 +1,7 @@
 import entities.Entities;
 import entities.Predator;
 import entities.Prey;
+import genetic.EdgeHistory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 
 public class App extends JPanel implements ActionListener {
     ArrayList<Entities> population = new ArrayList<>();
+    ArrayList<EdgeHistory> innovationHistory = new ArrayList<>();
 
     public static void main(String[] args){
         App sim = new App();
@@ -37,6 +39,11 @@ public class App extends JPanel implements ActionListener {
         //init the first entities
         initPreds(initCountPred);
         initPreys(initCountPrey);
+
+        for (Entities entity: population) {
+            entity.brain.fullyConnect(this.innovationHistory);
+            entity.brain.generateNetwork();
+        }
 
         Timer t = new Timer(16, this);
         t.restart();
