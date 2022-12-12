@@ -41,7 +41,7 @@ public class Predator extends Entities implements PredatorSetting {
     public void childUpdate() {
         energy -= 0.004;
 
-        if(this.energy >= 3){
+        if(this.energy >= 3.5){
             this.population.add(this.lahiran());
             this.energy -= 2;
         }
