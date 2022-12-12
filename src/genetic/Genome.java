@@ -247,11 +247,6 @@ public class Genome {
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------
     public boolean randomConnectionNodesAreShit(int r1, int r2) {
-//        if (this.nodes.get(r1).layer == this.nodes.get(r2).layer || // if the this.nodes are in the same layer
-//                this.nodes.get(r1).isConnectedTo(this.nodes.get(r2))) //if the this.nodes are already connected
-//            return true;
-//
-//        return false;
         return this.nodes.get(r1).getLayer() == this.nodes.get(r2).getLayer() || // if the this.nodes are in the same layer
                 this.nodes.get(r1).isConnectedTo(this.nodes.get(r2)); // if the this.nodes are already connected
     }
@@ -300,9 +295,6 @@ public class Genome {
             nodesInLayers.set(i, 0);
         }
         //populate array
-//        for (int i = 0; i < this.nodes.size(); i++) {
-//            nodesInLayers[this.nodes.get(i).layer] += 1;
-//        }
 
         int nodeLayer;
         for (Node node: this.nodes) {
@@ -325,10 +317,6 @@ public class Genome {
         //if the number of connections is equal to the max number of connections possible then it is full
         return maxConnections == this.genes.size();
 
-
-        //System.out.println(this.genes.size());
-        //System.out.println(maxConnections);
-        //System.out.println(nodesInLayers);
     }
 
 
@@ -338,7 +326,6 @@ public class Genome {
         if (this.genes.size() == 0) {
             this.addConnection(innovationHistory);
         }
-
 
         double rand1 = rand.get(1);
         if (rand1 < 0.8) { // 80% of the time mutate weights
@@ -433,7 +420,7 @@ public class Genome {
     //----------------------------------------------------------------------------------------------------------------------------------------
     //prints out info about the genome to the console
     public void printGenome() {
-        System.out.println("Prvar genome  layers:" + this.layers);
+        System.out.println("Prvar genome layers:" + this.layers);
         System.out.println("bias node: " + this.biasNode);
         System.out.println("this.nodes");
         for (Node node : this.nodes)
