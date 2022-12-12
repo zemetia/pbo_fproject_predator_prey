@@ -59,7 +59,7 @@ public class App extends JPanel implements ActionListener {
                 entity.paint(g);
             }
             catch (Exception e) {
-                System.out.println(e.toString());
+                //pass
             }
 
         }

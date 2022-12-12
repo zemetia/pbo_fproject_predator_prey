@@ -8,7 +8,7 @@ import genetic.Rand;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Entities {
+public abstract class Entities {
     protected double energy;
     protected double speed;
     private double direction = 0; //360 degrees convert into a vector (x, y) with sin and cos
