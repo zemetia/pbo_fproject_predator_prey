@@ -19,6 +19,7 @@ public class Predator extends Entities implements PredatorSetting {
     public Predator lahiran() {
         Predator child = new Predator(population);
         child.brain = this.brain.cloneGenome();
+        child.brain.generateNetwork();
         child.position.setByCoordinate(this.position);
         child.generation = this.generation + 1;
         this.children++;

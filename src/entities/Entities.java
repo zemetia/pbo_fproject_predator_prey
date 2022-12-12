@@ -1,6 +1,7 @@
 package entities;
 
 import Collection.Coordinate;
+import genetic.EdgeHistory;
 import genetic.Genome;
 import genetic.Rand;
 
@@ -14,15 +15,17 @@ public class Entities {
     protected Coordinate<Double> position = new Coordinate<Double>(0.0,0.0);
     protected Coordinate<Double> velocity = new Coordinate<Double>(0.0,0.0);
     protected Coordinate<Double> size = new Coordinate<Double>(0.0,0.0);
+    protected Coordinate<Double> centerPosition;
     int generation = 0;
     int children = 0;
     int eaten = 0;
     private Color color = Color.LIGHT_GRAY;
 
-    protected Genome brain;
+    public Genome brain;
     private ArrayList<Double> decision = new ArrayList<>();
+
     protected Vision vision;
-    protected Coordinate<Double> centerPosition;
+
     private Rand rand = new Rand();
 
     public Entities(){
