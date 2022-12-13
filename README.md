@@ -1,9 +1,10 @@
 # pbo_fproject_predator_prey
 
 inspired by: https://www.youtube.com/watch?v=qwrp3lB-jkQ&t=19s
-( Evolving AIs - Predator vs Prey, who will win? ) by Pezzza's Work | No Source Code
+<br>( Evolving AIs - Predator vs Prey, who will win? ) by Pezzza's Work | No Source Code
 <br>Created/Coded by Yoel Mountanus Sitorus 
 <br>NRP 5025211078 Informatics Engineering of ITS
+<br>Youtube Link: https://youtu.be/v-V8bw-OowE
 
 <img width="590" alt="image" src="https://user-images.githubusercontent.com/27951856/207224325-4d957f0f-6f2b-459a-8653-ac9d8c8afc41.png">
 
