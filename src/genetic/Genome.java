@@ -100,9 +100,6 @@ public class Genome {
         this.connectNodes();
     }
 
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //returns the node with a matching number
-    //sometimes the this.nodes will not be in order
     public Node getNode(int nodeNumber) {
         for (Node node: this.nodes) {
             if (node.getNumber() == nodeNumber) {
@@ -112,9 +109,6 @@ public class Genome {
         return null;
     }
 
-
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //adds the conenctions going out of a node to that node so that it can acess the next node during feeding forward
     public void connectNodes() {
 
         for (Node node: this.nodes) //clear the connections
@@ -125,8 +119,6 @@ public class Genome {
 
     }
 
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    //feeding in input values varo the NN and returning output array
     public ArrayList<Double> feedForward(ArrayList<Double> inputValues) {
         //set the outputs of the input this.nodes
         for (int i = 0; i < this.inputs; i++)
@@ -148,9 +140,6 @@ public class Genome {
         return outs;
     }
 
-    //----------------------------------------------------------------------------------------------------------------------------------------
-    //sets up the NN as a list of this.nodes in order to be engaged
-
     public void generateNetwork() {
         this.connectNodes();
         this.network.clear();
@@ -163,11 +152,7 @@ public class Genome {
             }
         }
     }
-    //-----------------------------------------------------------------------------------------------------------------------------------------
-    //mutate the NN by adding a new node
-    //it does this by picking a random connection and disabling it then 2 new connections are added
-    //1 between the input node of the disabled connection and the new node
-    //and the other between the new node and the output of the disabled connection
+
     public void addNode(ArrayList<EdgeHistory> innovationHistory) {
         //pick a random connection to create a node between
         if (this.genes.size() == 0) {
@@ -225,7 +210,7 @@ public class Genome {
         //get random this.nodes
         int randomNode1 = (int)Math.floor(rand.get(this.nodes.size()));
         int randomNode2 = (int)Math.floor(rand.get(this.nodes.size()));
-        while (this.randomConnectionNodesAreShit(randomNode1, randomNode2)) { //while the random this.nodes are no good
+        while (this.randomEdgeNode(randomNode1, randomNode2)) { //while the random this.nodes are no good
             //get new ones
             randomNode1 = (int)Math.floor(rand.get(this.nodes.size()));
             randomNode2 = (int)Math.floor(rand.get(this.nodes.size()));
@@ -237,8 +222,6 @@ public class Genome {
             randomNode1 = temp;
         }
 
-        //get the innovation number of the connection
-        //this will be a new number if no identical genome has mutated in the same way
         int connectionInnovationNumber = this.getInnovationNumber(innovationHistory, this.nodes.get(randomNode1), this.nodes.get(randomNode2));
         //add the connection with a random array
 
@@ -246,15 +229,11 @@ public class Genome {
         this.connectNodes();
     }
     //-------------------------------------------------------------------------------------------------------------------------------------------
-    public boolean randomConnectionNodesAreShit(int r1, int r2) {
+    public boolean randomEdgeNode(int r1, int r2) {
         return this.nodes.get(r1).getLayer() == this.nodes.get(r2).getLayer() || // if the this.nodes are in the same layer
                 this.nodes.get(r1).isConnectedTo(this.nodes.get(r2)); // if the this.nodes are already connected
     }
 
-    //-------------------------------------------------------------------------------------------------------------------------------------------
-    //returns the innovation number for the new mutation
-    //if this mutation has never been seen before then it will be given a new unique innovation number
-    //if this mutation matches a previous mutation then it will be given the same innovation number as the previous one
     public int getInnovationNumber(ArrayList<EdgeHistory> innovationHistory, Node from, Node to) {
         boolean isNew = true;
         int connectionInnovationNumber = nextConnectionNo;
@@ -283,9 +262,7 @@ public class Genome {
         }
         return connectionInnovationNumber;
     }
-    //----------------------------------------------------------------------------------------------------------------------------------------
 
-    //returns whether the network is fully connected or not
     public boolean fullyConnected() {
 
         //System.out.println("fullyconnect1");
@@ -302,9 +279,6 @@ public class Genome {
             nodesInLayers.set(node.getLayer(), ++nodeLayer);
         }
 
-        //System.out.println("fullyconnect2");
-        //for each layer the maximum amount of connections is the number in this layer * the number of this.nodes infront of it
-        //so lets add the max for each layer together and then we will get the maximum amount of connections in the network
         for (int i = 0; i < this.layers - 1; i++) {
             int nodesInFront = 0;
             for (int j = i + 1; j < this.layers; j++) { //for each layer infront of this layer
@@ -313,8 +287,7 @@ public class Genome {
 
             maxConnections += nodesInLayers.get(i) * nodesInFront;
         }
-        //System.out.println("fullyconnect3");
-        //if the number of connections is equal to the max number of connections possible then it is full
+
         return maxConnections == this.genes.size();
 
     }
@@ -335,7 +308,6 @@ public class Genome {
             }
         }
 
-        //5% of the time add a new connection
         double rand2 = rand.get(1);
         if (rand2 < 0.05) {
 
@@ -350,8 +322,6 @@ public class Genome {
         }
     }
 
-    //---------------------------------------------------------------------------------------------------------------------------------
-    //called when this Genome is better that the other parent
     public Genome crossover(Genome parent2) {
         Genome child = new Genome(this.inputs, this.outputs, true);
         child.layers = this.layers;
@@ -409,8 +379,6 @@ public class Genome {
         return child;
     }
 
-    //----------------------------------------------------------------------------------------------------------------------------------------
-    //returns whether or not there is a gene matching the input innovation number  in the input genome
     public int matchingGene(Genome parent2, int innovationNumber) {
         for (int i = 0; i < parent2.genes.size(); i++) {
             if (parent2.genes.get(i).getInnovationNo() == innovationNumber) return i;
@@ -435,8 +403,6 @@ public class Genome {
         System.out.println();
     }
 
-    //----------------------------------------------------------------------------------------------------------------------------------------
-    //returns a copy of this genome
     public Genome cloneGenome() {
 
         Genome clone = new Genome(this.inputs, this.outputs, true);
