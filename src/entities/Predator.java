@@ -10,6 +10,7 @@ public class Predator extends Entities implements PredatorSetting {
     public Predator(ArrayList<Entities> pop){
         super();
         this.population = pop;
+        this.radius = RADIUS;
         this.brain = new Genome(INPUT_AMOUNT, GEN_OUTPUT, false);
         this.vision = new Vision(INPUT_MAXLENGTH, INPUT_AMOUNT, INPUT_ANGLEAREA);
         this.size.setAll(RADIUS, RADIUS);
@@ -32,6 +33,7 @@ public class Predator extends Entities implements PredatorSetting {
         if (distance < (RADIUS + prey.RADIUS) / 2 ) {
             this.eaten++;
             this.energy++;
+            prey.setLived(false);
             return true;
         }
         return false;
@@ -48,6 +50,7 @@ public class Predator extends Entities implements PredatorSetting {
 
         if(this.energy <= 0) {
             population.remove(this);
+            this.setLived(false);
             speed = 0.0;
         }
 

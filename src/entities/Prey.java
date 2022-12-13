@@ -7,11 +7,10 @@ import java.util.ArrayList;
 
 public class Prey extends Entities implements PreySetting {
     private ArrayList<Entities> population;
-    private boolean stunt;
     public Prey(ArrayList<Entities> prey) {
         super();
         this.population = prey;
-        this.stunt = false;
+        this.radius = RADIUS;
         this.brain = new Genome(INPUT_AMOUNT, GEN_OUTPUT, false);
         this.vision = new Vision(INPUT_MAXLENGTH, INPUT_AMOUNT, INPUT_ANGLEAREA);
         this.size.setAll(RADIUS, RADIUS);

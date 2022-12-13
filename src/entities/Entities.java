@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public abstract class Entities {
     protected double energy;
     protected double speed;
+    protected double radius;
     private double direction = 0; //360 degrees convert into a vector (x, y) with sin and cos
     protected Coordinate<Double> position = new Coordinate<Double>(0.0,0.0);
     protected Coordinate<Double> velocity = new Coordinate<Double>(0.0,0.0);
@@ -28,8 +29,11 @@ public abstract class Entities {
 
     private Rand rand = new Rand();
 
+    protected boolean isLived;
+
     public Entities(){
         //init location
+        isLived = true;
         this.position.setAll(
                 rand.get(790),
                 rand.get(590)
@@ -63,6 +67,39 @@ public abstract class Entities {
         newPosition.addWithCoordinate(newSize); //coordinat ditengah lingkaran
         return newPosition;
     }
+
+    public int getGeneration() {
+        return generation;
+    }
+
+    public int getChildren() {
+        return children;
+    }
+
+    public int getEaten() {
+        return eaten;
+    }
+
+    public Coordinate<Double> getCenterPositionVal(){
+        return this.centerPosition;
+    }
+
+    public void setLived(boolean lived) {
+        isLived = lived;
+    }
+
+    public boolean isLived() {
+        return isLived;
+    }
+
+    public double getEnergy() {
+        return energy;
+    }
+
+    public double getRadius() {
+        return radius;
+    }
+
 
     public void setColor(Color color){
         this.color = color;
